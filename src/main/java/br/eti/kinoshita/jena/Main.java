@@ -64,16 +64,16 @@ public class Main {
             }
         }
     }
-    
-    public static void main(String[] args) throws Throwable {
+
+    public static void main3(String[] args) throws Throwable {
         // Query String
-        final String queryString = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" + 
+        final String queryString = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
                 "PREFIX fn: <http://www.w3.org/2005/xpath-functions#>\n"  +
-                "SELECT ?label\n" + 
-                "WHERE {\n" + 
-                "  ?any skos:prefLabel|skos:altLabel ?label .\n" + 
-                "} \n" + 
-                "ORDER BY fn:collation(\"ruff\", ?label)";
+                "SELECT ?label\n" +
+                "WHERE {\n" +
+                "  ?any skos:prefLabel|skos:altLabel ?label .\n" +
+                "} \n" +
+                "ORDER BY fn:collation(\"fi\", ?label)";
         // --- Model
         Model model = ModelFactory.createDefaultModel();
         try (InputStream is = Main.class.getResourceAsStream("/vocabularies.ttl")) {
@@ -91,4 +91,56 @@ public class Main {
         }
     }
 
+    public static void main4(String[] args) throws Throwable {
+        // Query String
+        final String queryString = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" + 
+                "PREFIX fn: <http://www.w3.org/2005/xpath-functions#>\n"  +
+                "SELECT ?label\n" + 
+                "WHERE {\n" + 
+                "  ?conc a skos:Concept .\n" + 
+                "  ?conc skos:prefLabel|skos:altLabel ?label .\n" + 
+                "  FILTER(STRSTARTS(LCASE(?label), \"t\"))\n" + 
+                "} \n" + 
+                "ORDER BY fn:collation(\"ruff\", ?label)";
+        // --- Model
+        Model model = ModelFactory.createDefaultModel();
+        try (InputStream is = Main.class.getResourceAsStream("/ysa-skos.ttl")) {
+            model.read(is, /* base */null, "TURTLE");
+        }
+        // Query object
+        Query query = QueryFactory.create(queryString);
+        // Execute query
+        try (QueryExecution qExec = QueryExecutionFactory.create(query, model)) {
+            ResultSet results = qExec.execSelect();
+            while (results.hasNext()) {
+                QuerySolution solution = results.nextSolution();
+                System.out.println(solution);
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Throwable {
+        // Query String
+        final String queryString = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" + 
+                "PREFIX arq: <http://jena.apache.org/ARQ/function#>\n"  +
+                "SELECT ?label WHERE {\n" + 
+                "   VALUES ?label { \"tsahurin kieli\"@fi \"tšekin kieli\"@fi \"tulun kieli\"@fi \"töyhtöhyyppä\"@fi }\n" + 
+                "}\n" + 
+                "ORDER BY arq:collation(\"fi\", ?label)";
+        // --- Model
+        Model model = ModelFactory.createDefaultModel();
+        try (InputStream is = Main.class.getResourceAsStream("/ysa-skos.ttl")) {
+            model.read(is, /* base */null, "TURTLE");
+        }
+        // Query object
+        Query query = QueryFactory.create(queryString);
+        // Execute query
+        try (QueryExecution qExec = QueryExecutionFactory.create(query, model)) {
+            ResultSet results = qExec.execSelect();
+            while (results.hasNext()) {
+                QuerySolution solution = results.nextSolution();
+                System.out.println(solution);
+            }
+        }
+    }
 }

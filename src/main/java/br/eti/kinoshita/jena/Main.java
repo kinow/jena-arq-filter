@@ -126,12 +126,9 @@ public class Main {
                 "SELECT ?label WHERE {\n" + 
                 "   VALUES ?label { \"tsahurin kieli\"@fi \"tšekin kieli\"@fi \"tulun kieli\"@fi \"töyhtöhyyppä\"@fi }\n" + 
                 "}\n" + 
-                "ORDER BY arq:collation(\"fi\", ?label)";
+                "ORDER BY arq:collation(\"en\", ?label)";
         // --- Model
         Model model = ModelFactory.createDefaultModel();
-        try (InputStream is = Main.class.getResourceAsStream("/ysa-skos.ttl")) {
-            model.read(is, /* base */null, "TURTLE");
-        }
         // Query object
         Query query = QueryFactory.create(queryString);
         // Execute query

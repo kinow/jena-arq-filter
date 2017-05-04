@@ -124,9 +124,9 @@ public class Main {
         final String queryString = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" + 
                 "PREFIX arq: <http://jena.apache.org/ARQ/function#>\n"  +
                 "SELECT ?label WHERE {\n" + 
-                "   VALUES ?label { \"tsahurin kieli\"@fi \"tšekin kieli\"@fi \"tulun kieli\"@fi \"töyhtöhyyppä\"@fi }\n" + 
+                "   VALUES ?label { \"tsahurin kieli\"@en \"tšekin kieli\" \"tulun kieli\"@es \"töyhtöhyyppä\"@fi }\n" + 
                 "}\n" + 
-                "ORDER BY arq:collation(\"en\", ?label)";
+                "ORDER BY arq:collation(\"fi\", ?label)";
         // --- Model
         Model model = ModelFactory.createDefaultModel();
         // Query object
